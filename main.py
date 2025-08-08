@@ -114,18 +114,6 @@ class AddressLookupApp(QWidget):
         else:
             self.result_area.setText("No matches found.")
 
-def show_statistics(self, index):
-    stacked_widget.setCurrentIndex(index)
-    if index == 6:
-        self.fun_statistics.setText("This chart highlights the imbalance between housing needs and approvals across wards.\n"
-                                    " While some wards with high poverty and renter populations receive fewer affordable \n"
-                                    "housing approvals, others with less need attract more developments.To improve housing \n"
-                                    "equity, planning should prioritize areas with both high demand and capacity for growth,\n"
-                                    "ensuring affordable housing projects align with community needs.Focusing on wards like\n"
-                                    " Toronto Centre (Ward 13) and Humber River–Black Creek (Ward 7) could help reduce\n"
-                                    " disparities and support vulnerable residents effectively.\n"
-                                    )
-
 
 class WardPage(QWidget):
     def __init__(self, stacked_widget):
@@ -165,13 +153,10 @@ class WardPage(QWidget):
         layout.addWidget(self.renter_btn, 1, 1, 1, 1)
 
         self.fun_statistics = QTextEdit() 
-        self.fun_statistics.setPlainText("This chart highlights the imbalance between housing needs and approvals across wards.\n"
-                                    " While some wards with high poverty and renter populations receive fewer affordable \n"
-                                    "housing approvals, others with less need attract more developments.To improve housing \n"
-                                    "equity, planning should prioritize areas with both high demand and capacity for growth,\n"
-                                    "ensuring affordable housing projects align with community needs.Focusing on wards like\n"
-                                    " Toronto Centre (Ward 13) and Humber River–Black Creek (Ward 7) could help reduce\n"
-                                    " disparities and support vulnerable residents effectively.\n"
+        self.fun_statistics.setPlainText("To improve housing equity, planning should prioritize areas with both high demand and capacity for growth,"
+                                 " ensuring affordable housing projects align with community needs.Focusing on wards like"
+                                " Toronto Centre (Ward 13) and Humber River–Black Creek (Ward 7) could help reduce"
+                                " disparities and support vulnerable residents effectively."
                                     )
         self.fun_statistics.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         layout.addWidget(self.fun_statistics, 1, 2, 1, 1)
