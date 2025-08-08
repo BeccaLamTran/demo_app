@@ -114,6 +114,19 @@ class AddressLookupApp(QWidget):
         else:
             self.result_area.setText("No matches found.")
 
+def show_statistics(self, index):
+    stacked_widget.setCurrentIndex(index)
+    if index == 6:
+        self.fun_statistics.setText("This chart highlights the imbalance between housing needs and approvals across wards.\n"
+                                    " While some wards with high poverty and renter populations receive fewer affordable \n"
+                                    "housing approvals, others with less need attract more developments.To improve housing \n"
+                                    "equity, planning should prioritize areas with both high demand and capacity for growth,\n"
+                                    "ensuring affordable housing projects align with community needs.Focusing on wards like\n"
+                                    " Toronto Centre (Ward 13) and Humber River–Black Creek (Ward 7) could help reduce\n"
+                                    " disparities and support vulnerable residents effectively.\n"
+                                    )
+
+
 class WardPage(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
@@ -152,6 +165,14 @@ class WardPage(QWidget):
         layout.addWidget(self.renter_btn, 1, 1, 1, 1)
 
         self.fun_statistics = QTextEdit() 
+        self.fun_statistics.setPlainText("This chart highlights the imbalance between housing needs and approvals across wards.\n"
+                                    " While some wards with high poverty and renter populations receive fewer affordable \n"
+                                    "housing approvals, others with less need attract more developments.To improve housing \n"
+                                    "equity, planning should prioritize areas with both high demand and capacity for growth,\n"
+                                    "ensuring affordable housing projects align with community needs.Focusing on wards like\n"
+                                    " Toronto Centre (Ward 13) and Humber River–Black Creek (Ward 7) could help reduce\n"
+                                    " disparities and support vulnerable residents effectively.\n"
+                                    )
         self.fun_statistics.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         layout.addWidget(self.fun_statistics, 1, 2, 1, 1)
         
@@ -182,11 +203,11 @@ class NeighbourhoodPage(QWidget):
         self.percent_rgi_btn.clicked.connect(lambda: stacked_widget.setCurrentIndex(9))
         layout.addWidget(self.percent_rgi_btn, 0, 1, 1, 1)
 
-        self.pol_div_btn = SquareButton() 
-        image_path = r"images\neighbourhoods\pol_div.png"
-        self.pol_div_btn.setIcon(QIcon(QPixmap(image_path)))
-        self.pol_div_btn.clicked.connect(lambda: stacked_widget.setCurrentIndex(10))
-        layout.addWidget(self.pol_div_btn, 0, 2, 1, 1)
+        self.short_summary_btn = SquareButton() 
+        image_path = r"images\neighbourhoods\short_summary.png"
+        self.short_summary_btn.setIcon(QIcon(QPixmap(image_path)))
+        self.short_summary_btn.clicked.connect(lambda: stacked_widget.setCurrentIndex(10))
+        layout.addWidget(self.short_summary_btn, 0, 2, 1, 1)
 
         self.build_by_decade_btn = SquareButton() 
         image_path = r"images\neighbourhoods\total_buildings_built_per_decade.png"
@@ -201,6 +222,7 @@ class NeighbourhoodPage(QWidget):
         layout.addWidget(self.unit_by_decade_btn, 1, 1, 1, 1)
 
         self.fun_statistics = QTextEdit() 
+        self.fun_statistics.setPlainText("Pre-1970 housing developments often had RGI shares close to 100%, reflecting a strong focus on deeply affordable housing.\n\nBy 2010+, RGI units made up a significantly smaller share, often below 30% in new builds, indicating a shift toward market-rate or mixed-income housing.")
         self.fun_statistics.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         layout.addWidget(self.fun_statistics, 1, 2, 1, 1)
 
@@ -230,11 +252,12 @@ class WardPageTemplate(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(QLabel(f"This is the {page_type}"))
 
+# add stats - to be fixed
         try:
             import os
             print("Looking for:", os.path.abspath(f"statistics/{page_type}.txt"))
 
-            text = pd.read_csv(f"statistics/{page_type}.txt").to_string(index=False)
+            text = pd.read_csv(f"statistics/{page_type}.txt", delimiter="\t", dtype=str).to_string(index=False)
             text_box = QTextEdit()
             text_box.setPlainText(text)
             text_box.setReadOnly(True)
@@ -254,6 +277,21 @@ class NeighbourhoodPageTemplate(QWidget):
         super().__init__()
         layout = QVBoxLayout()
         layout.addWidget(QLabel(f"This is the {page_type}"))
+      #  layout.addWidget(QLabel(f"Statistics: {page_stats}"))
+
+
+        try:
+            import os
+            print("Looking for:", os.path.abspath(f"statistics/{page_type}.txt"))
+
+            text = pd.read_csv(f"statistics/{page_type}.txt", delimiter="\t", dtype=str).to_string(index=False)
+            text_box = QTextEdit()
+            text_box.setPlainText(text)
+            text_box.setReadOnly(True)
+            layout.addWidget(text_box)
+
+        except FileNotFoundError:
+            layout.addWidget(QLabel("Statistics file not found."))
 
         back_button = QPushButton("Back")
         back_button.clicked.connect(lambda: stacked_widget.setCurrentIndex(2))
@@ -278,7 +316,7 @@ def createPages(stacked_widget, page_type):
         case 7:
             return NeighbourhoodPageTemplate(stacked_widget, "percent_rgi")
         case 8:
-            return NeighbourhoodPageTemplate(stacked_widget, "pol_div")
+            return NeighbourhoodPageTemplate(stacked_widget, "short_summary") 
         case 9:
             return NeighbourhoodPageTemplate(stacked_widget, "build_by_decade")
         case 10:
@@ -300,9 +338,10 @@ if __name__ == "__main__":
     ehon = createPages(stacked_widget, 3)
     income = createPages(stacked_widget, 4)
     renter = createPages(stacked_widget, 5)
+    
     top_ten_neighbourhoods = createPages(stacked_widget, 6)
     percent_rgi = createPages(stacked_widget, 7)
-    pol_div = createPages(stacked_widget, 8)
+    short_summary = createPages(stacked_widget, 8) 
     build_by_decade = createPages(stacked_widget, 9)
     unit_by_decade = createPages(stacked_widget, 10)  
       
@@ -319,7 +358,7 @@ if __name__ == "__main__":
     stacked_widget.addWidget(renter)              # index 7
     stacked_widget.addWidget(top_ten_neighbourhoods) # index 8
     stacked_widget.addWidget(percent_rgi)            # index 9
-    stacked_widget.addWidget(pol_div)                # index 10
+    stacked_widget.addWidget(short_summary)                # index 10 
     stacked_widget.addWidget(build_by_decade)        # index 11
     stacked_widget.addWidget(unit_by_decade)         # index 12
 
