@@ -154,7 +154,7 @@ class WardPage(QWidget):
 
         self.fun_statistics = QTextEdit() 
         self.fun_statistics.setPlainText("To improve housing equity, planning should prioritize areas with both high demand and capacity for growth,"
-                                 " ensuring affordable housing projects align with community needs.Focusing on wards like"
+                                 " ensuring affordable housing projects align with community needs. \nFocusing on wards like"
                                 " Toronto Centre (Ward 13) and Humber River–Black Creek (Ward 7) could help reduce"
                                 " disparities and support vulnerable residents effectively."
                                     )
